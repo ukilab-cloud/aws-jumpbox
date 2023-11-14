@@ -18,7 +18,8 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
-# Create Role for Jumpbox to be apble to use terraform and deploy as necessayr
+# Create Role for Jumpbox to be apble to use terraform and deploy as necessary
+# WARNING - This host will have extensive permissions within the account/access to this box should be locked down.
 resource "aws_iam_instance_profile" "jumpbox_profile" {
   name = "Jumpbox_profile"
   role = aws_iam_role.jumpbox_role.name
@@ -118,6 +119,47 @@ resource "aws_security_group" "NSG-jumpzone" {
   }
 }
 
+#########################
+## Begin Userdata Section
+
+data "template_file" "userdata_linux" {
+  template = "${file("${path.module}/userdata-linux.tpl")}"
+  vars = {
+    lab_username = "${var.lab_username}"
+    linux_username = "${var.linux_username}"
+    linux_password = "${aws_vpc.vpc_jumpzone.id}"
+  }
+}
+
+# Render a multi-part cloud-init config making use of the part
+# above, and other source files
+
+data "template_cloudinit_config" "config" {
+  gzip          = true
+  base64_encode = true
+
+  # Main cloud-config configuration file.
+  part {
+    filename     = "init.cfg"
+    content_type = "text/cloud-config"
+    content      = "${data.template_file.userdata_linux.rendered}"
+  }
+
+  part {
+    content_type = "text/x-shellscript"
+    content      = "fill1"
+  }
+
+  part {
+    content_type = "text/x-shellscript"
+    content      = "fill2"
+  }
+}
+
+## End Userdata Section
+#########################
+
+
 # Jumpzopne Instance
 resource "aws_instance" "jumpzone-host" {
   ami                    = data.aws_ami.ubuntu.id
@@ -128,6 +170,7 @@ resource "aws_instance" "jumpzone-host" {
   associate_public_ip_address = true
   private_ip             = cidrhost(var.vpc_jumpzone_public_subnet_cidr, var.vpc_jumpzone_hostnum)
   iam_instance_profile = aws_iam_instance_profile.jumpbox_profile.name
+  user_data_base64 = "${data.template_cloudinit_config.config.rendered}"
   tags = {
     Name     = "${var.tag_name_prefix}-jumpzone-host"
     scenario = var.scenario

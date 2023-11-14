@@ -9,6 +9,12 @@
 variable "access_key" {}
 variable "secret_key" {}
 
+# Username for the linux host (password is instance-id)
+variable "linux_username" {
+  description = "Ubuntu host username"
+  default     = "lab1"
+} 
+
 # Uncomment if using AWS SSO:
 # variable "token"      {}
 # References of your environment
@@ -32,7 +38,7 @@ variable "availability_zone2" {
 
 variable "lab_username" {
   description = "Username for the AWS Console user"
-  default     = "UK-LAB2"  
+  default     = "UK-LAB1"  
 }
 
 #Key Pair Name
