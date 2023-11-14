@@ -44,7 +44,8 @@ resource "aws_iam_user_policy_attachment" "VPCFull-attach" {
 
 resource "aws_iam_user_login_profile" "labuser_login" {
   user    = aws_iam_user.labuser.name
-  #pgp_key = "keybase:some_person_that_exists"
+  #pgp_key = "keybase:some_person_that_exists" - Use this if you want to
+  #generate a password and export it with an output.
 }
 
 #### Keys used by any instances deployed by this template

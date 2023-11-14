@@ -9,6 +9,7 @@ output "jumpzone_public_ip" {
   value       = aws_instance.jumpzone-host.public_ip
 }
 
-output "labuser_password" {
-  value = aws_iam_user_login_profile.labuser_login.encrypted_password
-}
+### Use this for exporting user password if specicifying PGP key 
+#output "labuser_password" {
+#  value = aws_iam_user_login_profile.labuser_login.encrypted_password
+#}
