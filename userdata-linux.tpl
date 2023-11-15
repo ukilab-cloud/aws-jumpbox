@@ -10,7 +10,7 @@ snap:
     commands:
         00: ['snap', 'install', 'terraform', '--classic']
 write_files:
-  - path: /etc/ssh/sshd_config.d/00-cloud-init
+  - path: /etc/ssh/sshd_config
     content: |
       Include /etc/ssh/sshd_config.d/*.conf
       PasswordAuthentication yes
