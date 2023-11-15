@@ -1,7 +1,7 @@
 ##############################################################################################################
 #
 # Jumpbox Terraform deployment
-# Active Passive High Availability MultiAZ with AWS Transit Gateway with VPC standard attachment -
+#
 #
 ##############################################################################################################
 
@@ -38,21 +38,21 @@ variable "availability_zone2" {
 
 variable "lab_username" {
   description = "Username for the AWS Console user"
-  default     = "UK-LAB1"  
+  default     = "uk-lab1"  
 }
 
 #Key Pair Name
 
 variable "keypair" {
-  description = "Provide a keypair for accessing the Jumpzone instances"
-  default     = "aplab"
+  description = "Provide a keypair for accessing the jumpbox instances"
+  default     = "jumpbox"
 }
 
 
 # Prefix for all resources created for this deployment in AWS
 variable "tag_name_prefix" {
   description = "Provide a common tag prefix value that will be used in the name tag for all resources"
-  default     = "aplab"
+  default     = "jumpbox"
 }
 
 
@@ -72,24 +72,24 @@ variable "instance_type" {
 }
 
 variable "scenario" {
-  default = "ap-tgw"
+  default = "jumpbox"
 }
 
 # References to your Networks
-# Jumpzone VPC
-variable "vpc_jumpzone_cidr" {
+# jumpbox VPC
+variable "vpc_jumpbox_cidr" {
   description = "Provide the network CIDR for the VPC"
   default     = "10.99.96.0/24"
 }
 
 #### public subnets
-variable "vpc_jumpzone_public_subnet_cidr" {
-  description = "Provide the network CIDR for Jumpzone Public Subnet"
+variable "vpc_jumpbox_public_subnet_cidr" {
+  description = "Provide the network CIDR for jumpbox Public Subnet"
   default     = "10.99.96.0/25"
 }
 
 ### Host address
-variable "vpc_jumpzone_hostnum" {
-  description = "host number in the VPC jumpzone public subnet"
+variable "vpc_jumpbox_hostnum" {
+  description = "host number in the VPC jumpbox public subnet"
   default     = "10"
 } 

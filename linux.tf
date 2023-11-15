@@ -73,10 +73,10 @@ resource "aws_iam_role_policy_attachment" "jumpbox-attach" {
 }
 ## Security Groups foro Spoke VPCs
 
-resource "aws_security_group" "NSG-jumpzone" {
-  name        = "NSG-jumpzone"
+resource "aws_security_group" "NSG-jumpbox" {
+  name        = "NSG-jumpbox"
   description = "Allow SSH, HTTPS and ICMP traffic"
-  vpc_id      = aws_vpc.vpc_jumpzone.id
+  vpc_id      = aws_vpc.vpc_jumpbox.id
 
   ingress {
     from_port   = 22
@@ -114,7 +114,7 @@ resource "aws_security_group" "NSG-jumpzone" {
   }
 
   tags = {
-    Name     = "NSG-jumpzone"
+    Name     = "NSG-jumpbox"
     scenario = var.scenario
   }
 }
@@ -127,14 +127,13 @@ data "template_file" "userdata_linux" {
   vars = {
     lab_username = "${var.lab_username}"
     linux_username = "${var.linux_username}"
-    linux_password = "${aws_vpc.vpc_jumpzone.id}"
   }
 }
 
 # Render a multi-part cloud-init config making use of the part
 # above, and other source files
 
-data "template_cloudinit_config" "config" {
+/* data "template_cloudinit_config" "config" {
   gzip          = true
   base64_encode = true
 
@@ -144,35 +143,40 @@ data "template_cloudinit_config" "config" {
     content_type = "text/cloud-config"
     content      = "${data.template_file.userdata_linux.rendered}"
   }
-
+  ## Future Script Section - Optional 
   part {
     content_type = "text/x-shellscript"
     content      = "fill1"
   }
-
+  
   part {
     content_type = "text/x-shellscript"
     content      = "fill2"
   }
-}
+} */
+
+# If using multipart mime - then user_data will be:
+# user_data_base64= "${data.template_cloudinit_config.config.rendered}"
+# See: https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/cloudinit_config
 
 ## End Userdata Section
 #########################
 
 
 # Jumpzopne Instance
-resource "aws_instance" "jumpzone-host" {
+resource "aws_instance" "jumpbox-host" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = var.instance_type
-  subnet_id              = aws_subnet.vpc_jumpzone_public_subnet.id
-  vpc_security_group_ids = [aws_security_group.NSG-jumpzone.id]
+  subnet_id              = aws_subnet.vpc_jumpbox_public_subnet.id
+  vpc_security_group_ids = [aws_security_group.NSG-jumpbox.id]
   key_name               = var.keypair
   associate_public_ip_address = true
-  private_ip             = cidrhost(var.vpc_jumpzone_public_subnet_cidr, var.vpc_jumpzone_hostnum)
+  private_ip             = cidrhost(var.vpc_jumpbox_public_subnet_cidr, var.vpc_jumpbox_hostnum)
   iam_instance_profile = aws_iam_instance_profile.jumpbox_profile.name
-  user_data_base64 = "${data.template_cloudinit_config.config.rendered}"
+  user_data = "${data.template_file.userdata_linux.rendered}"
+  #user_data_base64 = "${data.template_cloudinit_config.config.rendered}"
   tags = {
-    Name     = "${var.tag_name_prefix}-jumpzone-host"
+    Name     = "${var.tag_name_prefix}-jumpbox-host"
     scenario = var.scenario
     az       = var.availability_zone1
   }

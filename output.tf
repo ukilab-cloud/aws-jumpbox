@@ -1,22 +1,17 @@
 # Output
-output "jumpzone_id" {
-  description = "ID of the EC2 instance"
-  value       = aws_instance.jumpzone-host.id
-}
-
-output "jumpzone_username" {
-  description = "Username for Jumpzone Host"
+output "jumpbox_username" {
+  description = "Username for Jumpbox Host"
   value       = var.linux_username
 }
 
-output "jumpzone_password" {
-  description = "Password for Jumpzone Host"
-  value       = aws_vpc.vpc_jumpzone.id
+output "jumpbox_password" {
+  description = "Password for Jumpbox Host (Instance ID)"
+  value       = aws_instance.jumpbox-host.id
 }
 
-output "jumpzone_public_ip" {
+output "jumpbox_public_ip" {
   description = "Public IP address of the EC2 instance"
-  value       = aws_instance.jumpzone-host.public_ip
+  value       = aws_instance.jumpbox-host.public_ip
 }
 ### Use this for exporting user password if specicifying PGP key 
 #output "labuser_password" {
