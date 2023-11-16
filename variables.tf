@@ -9,15 +9,15 @@
 variable "access_key" {}
 variable "secret_key" {}
 
+# Uncomment if using AWS SSO:
+# variable "token"      {}
+# References of your environment
+
 # Username for the linux host (password is instance-id)
 variable "linux_username" {
   description = "Ubuntu host username"
   default     = "lab1"
 } 
-
-# Uncomment if using AWS SSO:
-# variable "token"      {}
-# References of your environment
 
 variable "region" {
   description = "Provide the region to deploy the VPC in"

@@ -38,3 +38,6 @@ runcmd:
   - chpasswd < /home/ubuntu/userpass.txt
   - update-alternatives --set vi /usr/bin/nvim
   - update-alternatives --set editor /usr/bin/nvim
+debug:
+   output: /var/log/cloud-init-debug.log
+   verbose: true
