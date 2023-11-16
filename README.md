@@ -12,7 +12,7 @@ Primarily for use in lab environments. Please review the userdata-linux.tpl and 
 
 
 FIXME - Pending
-![Jumpox Architecture](./images/jumpbox-architecture.png?raw=true "Jumpbox Architecture")
+![Jumpox Architecture](.images/jumpbox-architecture.png?raw=true "Jumpbox Architecture")
 
 ## Deployment
 - Clone the repository.
