@@ -1,18 +1,22 @@
-# AWS Jumpbox Introdcution
+# AWS Jumpbox Introduction
 An Ubuntu instance with all the tools/permissions to perform Terraform deployments.
 Primarily for use in lab environments. Please review the userdata-linux.tpl and IAM roles before deployment.
 
 ## Requirements
-
 - [Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html) >= 1.6.0
 - An SSH Client.
 - An AWS account with EC2, VPC and IAM write permissions.
 
+
 ## Deployment Overview
-
-
 FIXME - Pending
 ![Jumpox Architecture](.images/jumpbox-architecture.png?raw=true "Jumpbox Architecture")
+
+## Included tools on jumpbox-host (Ubuntu 22.04 LTS)
+- Terraform
+- Git
+- Neovim 
+- Micro - a user friendly editor alternative to Nano ideal for Lab user with no vi experience
 
 ## Deployment
 - Clone the repository.
@@ -53,4 +57,6 @@ $ terraform destroy
 ```
 
 # Disclaimer
-This is a community proect and the contents are offered "as is". The authors make no representations or warranties of any kind, express or implied, as to the use or operation of the site or the information, content, materials included on this site. To the full extent permissible by applicable law, the authors disclaim all warranties, express or implied, including, but not limited to, implied warranties of merchantability and fitness for a particular purpose. You acknowledge, by your use of the site, that your use of the site is at your sole risk. If you break it, it is on you.
+This is a community project, the of this project are offered "as is". The authors make no representations or warranties of any kind, express or implied, as to the use or operation of content and materials included on this site. To the full extent permissible by applicable law, the authors disclaim all warranties, express or implied, including, but not limited to, implied warranties of merchantability and fitness for a particular purpose. You acknowledge, by your use of the site, that your use of the site is at your sole risk. 
+
+If you break it, it is on you.
