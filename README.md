@@ -1,6 +1,6 @@
 # AWS Jumpbox Introdcution
 An Ubuntu instance with all the tools/permissions to perform Terraform deployments.
-Primarily for use in Lab Environment. Please review the userdata-linux.tpl and IAM roles before deployment.
+Primarily for use in lab environments. Please review the userdata-linux.tpl and IAM roles before deployment.
 
 ## Requirements
 
@@ -11,7 +11,7 @@ Primarily for use in Lab Environment. Please review the userdata-linux.tpl and I
 ## Deployment Overview
 
 
-
+FIXME - Pending
 ![Jumpox Architecture](./images/jumpbox-architecture.png?raw=true "Jumpbox Architecture")
 
 ## Deployment
