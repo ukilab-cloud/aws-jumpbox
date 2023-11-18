@@ -71,7 +71,7 @@ resource "aws_iam_role_policy_attachment" "jumpbox-attach" {
   role       = aws_iam_role.jumpbox_role.name
   policy_arn = aws_iam_policy.jumpbox_policy.arn
 }
-## Security Groups foro Spoke VPCs
+## Security Groups for Spoke VPCs
 
 resource "aws_security_group" "NSG-jumpbox" {
   name        = "NSG-jumpbox"
