@@ -2,6 +2,14 @@
 An Ubuntu instance with all the tools/permissions to perform Terraform deployments.
 Primarily for use in lab environments. Please review the userdata-linux.tpl and IAM roles before deployment.
 
+# Purpose
+
+This environment is designed as basis for terraform based labs such as:
+
+- [Fortinet FGCP Active/Passive HA Lab](https://github.com/ukilab-cloud/lab-tgw-fgcp) which is documented [here](https://ukilab-cloud.github.io/lab-tgw-fgcp/)
+
+
+
 ## Requirements
 - [Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html) >= 1.6.0
 - An SSH Client.
@@ -9,14 +17,18 @@ Primarily for use in lab environments. Please review the userdata-linux.tpl and 
 
 
 ## Deployment Overview
-FIXME - Pending
 ![Jumpox Architecture](.images/jumpbox-architecture.png?raw=true "Jumpbox Architecture")
 
-## Included tools on jumpbox-host (Ubuntu 22.04 LTS)
-- Terraform
-- Git
-- Neovim 
-- Micro - a user friendly editor alternative to Nano ideal for Lab user with no vi experience
+### Included in the deployment
+
+ - Ubuntu 20.04 LTS Jumpbox accessible over public IP
+     - Terraform 1.6+
+     - git
+     - micro (terminal editor)
+     - neovim (terminal editor)
+ - AWS IAM Role with STS Assumption applied to Ubuntu host for use by Terraform
+ - AWS Console User for viewing lab activities
+ - SSH Key Pair for accessing the UbuntuHost
 
 ## Deployment
 - Clone the repository.
