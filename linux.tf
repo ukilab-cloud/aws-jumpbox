@@ -119,45 +119,44 @@ resource "aws_security_group" "NSG-jumpbox" {
   }
 }
 
-#########################
-## Begin Userdata Section
+################################################
+## Begin Userdata Section using native functions
 
-data "template_file" "userdata_linux" {
-  template = "${file("${path.module}/userdata-linux.tpl")}"
-  vars = {
-    lab_username = "${var.lab_username}"
-    linux_username = "${var.linux_username}"
-  }
+locals {
+  linux_userdata = templatefile(
+    "${path.module}/userdata-linux.tftpl",
+    {
+      lab_username = "${var.lab_username}",
+      linux_username = "${var.linux_username}"
+    }
+  )
 }
 
-# Render a multi-part cloud-init config making use of the part
-# above, and other source files
 
-/* data "template_cloudinit_config" "config" {
-  gzip          = true
-  base64_encode = true
+#####################################################################
+## For Multipart Mime Use uncomment this section and use
+## user_data = data.cloudinit_config.cloudinit_linux.rendered in the 
+## instance resource
 
-  # Main cloud-config configuration file.
-  part {
-    filename     = "init.cfg"
-    content_type = "text/cloud-config"
-    content      = "${data.template_file.userdata_linux.rendered}"
+
+/* data "cloudinit_config" "cloudinit_linux" {
+  gzip          = false
+  base64_encode = false
+
+   part {
+    filename     = "cloud-config.yaml"
+    content_type = "text/jinja2"
+    content = "${local.linux_userdata}"
   }
-  ## Future Script Section - Optional 
   part {
+    filename     = "example-insline-script.sh"
     content_type = "text/x-shellscript"
-    content      = "fill1"
-  }
-  
-  part {
-    content_type = "text/x-shellscript"
-    content      = "fill2"
+    content = <<EOF
+#!/bin/sh
+curl http://169.254.169.254/latest/user-data > /home/ubuntu/userdata.txt
+EOF
   }
 } */
-
-# If using multipart mime - then user_data will be:
-# user_data_base64= "${data.template_cloudinit_config.config.rendered}"
-# See: https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/cloudinit_config
 
 ## End Userdata Section
 #########################
@@ -173,8 +172,8 @@ resource "aws_instance" "jumpbox-host" {
   associate_public_ip_address = true
   private_ip             = cidrhost(var.vpc_jumpbox_public_subnet_cidr, var.vpc_jumpbox_hostnum)
   iam_instance_profile = aws_iam_instance_profile.jumpbox_profile.name
-  user_data = "${data.template_file.userdata_linux.rendered}"
-  #user_data_base64 = "${data.template_cloudinit_config.config.rendered}"
+  user_data = local.linux_userdata
+  #user_data = data.cloudinit_config.cloudinit_linux.rendered
   tags = {
     Name     = "${var.tag_name_prefix}-jumpbox-host"
     scenario = var.scenario
