@@ -7,6 +7,7 @@ packages:
   - whois
   - neovim
   - micro
+  - zsh
 package_update: true
 package_upgrade: true
 snap:
@@ -38,6 +39,7 @@ runcmd:
   - chpasswd < /home/ubuntu/userpass.txt
   - update-alternatives --set vi /usr/bin/nvim
   - update-alternatives --set editor /usr/bin/nvim
+  - sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 debug:
    output: /var/log/cloud-init-debug.log
    verbose: true
