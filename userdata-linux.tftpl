@@ -39,7 +39,9 @@ runcmd:
   - chpasswd < /home/ubuntu/userpass.txt
   - update-alternatives --set vi /usr/bin/nvim
   - update-alternatives --set editor /usr/bin/nvim
-  - wget -O /home/{$linux_username}/omz.sh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
-debug:
-   output: /var/log/cloud-init-debug.log
-   verbose: true
+  - wget -O /home/${linux_username}/omz.sh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+  - wget -O /usr/sbin/miniserve https://github.com/svenstaro/miniserve/releases/download/v0.24.0/miniserve-0.24.0-x86_64-unknown-linux-gnu
+  - chmod +x /usr/sbin/miniserve
+#debug:
+#   output: /var/log/cloud-init-debug.log
+#   verbose: true
