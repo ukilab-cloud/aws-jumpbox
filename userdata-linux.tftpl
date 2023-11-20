@@ -15,7 +15,7 @@ snap:
         00: ['snap', 'install', 'terraform', '--classic']
 #############################################################
 #### SSH password access using instance ID as the password
-#### DO NOT USE IN PRODUCTION! This is for Lab exercices only
+#### DO NOT USE IN PRODUCTION! This is for Lab exercises only
 #############################################################
 write_files:
   - path: /etc/ssh/sshd_config
@@ -39,7 +39,7 @@ runcmd:
   - chpasswd < /home/ubuntu/userpass.txt
   - update-alternatives --set vi /usr/bin/nvim
   - update-alternatives --set editor /usr/bin/nvim
-  - wget -O /home/$linux_username/omz.sh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+  - wget -O /home/{$linux_username}/omz.sh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
 debug:
    output: /var/log/cloud-init-debug.log
    verbose: true
