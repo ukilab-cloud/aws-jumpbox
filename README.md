@@ -28,7 +28,6 @@ This environment is designed as basis for terraform based labs such as:
      - neovim (terminal editor)
      - helix (terminal editor)
      - zellij (friendly terminal multiplexer)
-     - lsd (ls alternative)
  - Change shell to Fish shell for LabX user
  - AWS IAM Role with STS Assumption applied to Ubuntu host for use by Terraform
  - AWS Console User for viewing lab activities (Password must be set manually)

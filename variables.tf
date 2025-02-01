@@ -6,18 +6,28 @@
 ##############################################################################################################
 
 # Access and secret keys to your environment
-variable "access_key" {}
-variable "secret_key" {}
-
-# Uncomment if using AWS SSO:
+#variable "access_key" {}
+#variable "secret_key" {}
+# Uncomment if using AWS SSO Token or Roel assumption:
 # variable "token"      {}
-# References of your environment
+variable "profile" {}
 
 # Username for the linux host (password is instance-id)
 variable "linux_username" {
   description = "Ubuntu host username"
   default     = "lab1"
-} 
+}
+variable "ubumajor" {
+  description = "Ubuntu Version - Using the AMI Description"
+  type        = string
+  default     = "ubuntu/images/hvm-ssd-gp3/ubuntu-oracular-24.10-amd64-server"
+}
+
+variable "ubudate" {
+  description = "Ubuntu Version - Date"
+  type        = string
+  default     = "20250110"
+}
 
 variable "region" {
   description = "Provide the region to deploy the VPC in"
@@ -38,7 +48,7 @@ variable "availability_zone2" {
 
 variable "lab_username" {
   description = "Username for the AWS Console user"
-  default     = "uk-lab1"  
+  default     = "uk-labl"
 }
 
 #Key Pair Name
@@ -68,7 +78,7 @@ variable "arch" {
 // For detail, refer to https://aws.amazon.com/ec2/instance-types/
 variable "instance_type" {
   description = "Provide the instance type for the Jumpbox"
-  default = "t2.micro"
+  default     = "t3a.micro"
 }
 
 variable "scenario" {
@@ -92,4 +102,11 @@ variable "vpc_jumpbox_public_subnet_cidr" {
 variable "vpc_jumpbox_hostnum" {
   description = "host number in the VPC jumpbox public subnet"
   default     = "10"
-} 
+}
+
+### Approved CIDR for access to Jumpbox - used by NSG REQUIRED
+### ChANGE THIS!
+variable "vpc_jumpbox_allowed_cidr" {
+  description = "Allowed CIDR block in array format"
+  default     = "0.0.0.0/0"
+}
