@@ -7,12 +7,12 @@ packages:
   - whois
   - neovim
   - micro
-  - zsh
+  - fish
 package_update: true
 package_upgrade: true
 snap:
-    commands:
-        00: ['snap', 'install', 'terraform', '--classic']
+  commands:
+    00: snap install terraform --classic
 #############################################################
 #### SSH password access using instance ID as the password
 #### DO NOT USE IN PRODUCTION! This is for Lab exercises only
@@ -20,7 +20,6 @@ snap:
 write_files:
   - path: /etc/ssh/sshd_config
     content: |
-      Include /etc/ssh/sshd_config.d/*.conf
       PasswordAuthentication yes
       ChallengeResponseAuthentication no
       UsePAM yes
@@ -35,13 +34,11 @@ write_files:
 runcmd:
   - hostname ${lab_username}
     ####### BAD PASSWORD PRACTICE - LAB ONLY ################
-  - useradd -m -s /bin/bash -G adm,sudo ${linux_username}
-  - chpasswd < /home/ubuntu/userpass.txt
+  - useradd -m -s /bin/fish -G adm,sudo ${linux_username}
   - update-alternatives --set vi /usr/bin/nvim
   - update-alternatives --set editor /usr/bin/nvim
-  - wget -O /home/${linux_username}/omz.sh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
   - wget -O /usr/sbin/miniserve https://github.com/svenstaro/miniserve/releases/download/v0.24.0/miniserve-0.24.0-x86_64-unknown-linux-gnu
   - chmod +x /usr/sbin/miniserve
-#debug:
-#   output: /var/log/cloud-init-debug.log
-#   verbose: true
+  - chpasswd < /home/ubuntu/userpass.txt
+  - snap install zellij --classic
+  - snap install helix --classic

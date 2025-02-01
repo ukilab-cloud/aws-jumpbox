@@ -2,12 +2,13 @@
 # VM LINUX for testing
 ##############################################################################################################
 ## Retrieve AMI info
+
 data "aws_ami" "ubuntu" {
   most_recent = true
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
+    values = ["${var.ubumajor}-${var.ubudate}"]
   }
 
   filter {
@@ -49,12 +50,12 @@ data "aws_iam_policy_document" "jumpbox_policy_document" {
     actions   = ["ec2:*"]
     resources = ["*"]
   }
-    statement {
+  statement {
     effect    = "Allow"
     actions   = ["vpc:*"]
     resources = ["*"]
   }
-    statement {
+  statement {
     effect    = "Allow"
     actions   = ["iam:*"]
     resources = ["*"]
@@ -82,28 +83,28 @@ resource "aws_security_group" "NSG-jumpbox" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["${var.vpc_jumpbox_allowed_cidr}"]
   }
 
   ingress {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["${var.vpc_jumpbox_allowed_cidr}"]
   }
 
   ingress {
     from_port   = 8 # the ICMP type number for 'Echo'
     to_port     = 0 # the ICMP code
     protocol    = "icmp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["${var.vpc_jumpbox_allowed_cidr}"]
   }
 
   ingress {
     from_port   = 0 # the ICMP type number for 'Echo Reply'
     to_port     = 0 # the ICMP code
     protocol    = "icmp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["${var.vpc_jumpbox_allowed_cidr}"]
   }
 
   egress {
@@ -126,7 +127,7 @@ locals {
   linux_userdata = templatefile(
     "${path.module}/userdata-linux.tftpl",
     {
-      lab_username = "${var.lab_username}",
+      lab_username   = "${var.lab_username}",
       linux_username = "${var.linux_username}"
     }
   )
@@ -164,15 +165,15 @@ EOF
 
 # Jumpzopne Instance
 resource "aws_instance" "jumpbox-host" {
-  ami                    = data.aws_ami.ubuntu.id
-  instance_type          = var.instance_type
-  subnet_id              = aws_subnet.vpc_jumpbox_public_subnet.id
-  vpc_security_group_ids = [aws_security_group.NSG-jumpbox.id]
-  key_name               = var.keypair
+  ami                         = data.aws_ami.ubuntu.id
+  instance_type               = var.instance_type
+  subnet_id                   = aws_subnet.vpc_jumpbox_public_subnet.id
+  vpc_security_group_ids      = [aws_security_group.NSG-jumpbox.id]
+  key_name                    = var.keypair
   associate_public_ip_address = true
-  private_ip             = cidrhost(var.vpc_jumpbox_public_subnet_cidr, var.vpc_jumpbox_hostnum)
-  iam_instance_profile = aws_iam_instance_profile.jumpbox_profile.name
-  user_data = local.linux_userdata
+  private_ip                  = cidrhost(var.vpc_jumpbox_public_subnet_cidr, var.vpc_jumpbox_hostnum)
+  iam_instance_profile        = aws_iam_instance_profile.jumpbox_profile.name
+  user_data                   = local.linux_userdata
   #user_data = data.cloudinit_config.cloudinit_linux.rendered
   tags = {
     Name     = "${var.tag_name_prefix}-jumpbox-host"

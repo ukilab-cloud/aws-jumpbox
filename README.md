@@ -21,13 +21,17 @@ This environment is designed as basis for terraform based labs such as:
 
 ### Included in the deployment
 
- - Ubuntu 20.04 LTS Jumpbox accessible over public IP
+ - Ubuntu 24.10 LTS Jumpbox accessible over public IP
      - Terraform 1.6+
      - git
      - micro (terminal editor)
      - neovim (terminal editor)
+     - helix (terminal editor)
+     - zellij (friendly terminal multiplexer)
+     - lsd (ls alternative)
+ - Change shell to Fish shell for LabX user
  - AWS IAM Role with STS Assumption applied to Ubuntu host for use by Terraform
- - AWS Console User for viewing lab activities
+ - AWS Console User for viewing lab activities (Password must be set manually)
  - SSH Key Pair for accessing the UbuntuHost
 
 ## Deployment
@@ -35,6 +39,11 @@ This environment is designed as basis for terraform based labs such as:
 - Copy `terraform.tfvars.example`  to `terraform.tfvars` 
 - Change ACCESS_KEY and SECRET_KEY values in terraform.tfvars
 - Change parameters in the variables.tf
+    - Advise adding your IP to "vpc_jumpbox_allowed_cidr" variable as all access is disabled by default
+    - Use myip.com to quickly get your public IP 
+    ```sh
+    $ ssh sshmyip.com
+    ```
 - If using SSO, uncomment the token variable in variables.tf and main.tf
 * Initialize the providers and modules:
   ```sh
