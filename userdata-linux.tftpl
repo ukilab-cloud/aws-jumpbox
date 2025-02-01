@@ -10,9 +10,6 @@ packages:
   - fish
 package_update: true
 package_upgrade: true
-snap:
-  commands:
-    00: snap install terraform --classic
 #############################################################
 #### SSH password access using instance ID as the password
 #### DO NOT USE IN PRODUCTION! This is for Lab exercises only
@@ -40,5 +37,11 @@ runcmd:
   - wget -O /usr/sbin/miniserve https://github.com/svenstaro/miniserve/releases/download/v0.24.0/miniserve-0.24.0-x86_64-unknown-linux-gnu
   - chmod +x /usr/sbin/miniserve
   - chpasswd < /home/ubuntu/userpass.txt
-  - snap install zellij --classic
-  - snap install helix --classic
+  - wget -O zellij.tar.gz https://github.com/zellij-org/zellij/releases/download/v0.41.2/zellij-x86_64-unknown-linux-musl.tar.gz && tar -zxvf zellij.tar.gz && rm zellij.tar.gz
+  - mv zellij /usr/bin/zellij
+  - wget https://github.com/helix-editor/helix/releases/download/25.01.1/helix_25.1.1-1_amd64.deb
+  - dpkg -i helix_25.1.1-1_amd64.deb
+  - wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+  - echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list
+  - apt update
+  - apt install terraform terraform-ls

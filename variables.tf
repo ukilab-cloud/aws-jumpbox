@@ -48,7 +48,7 @@ variable "availability_zone2" {
 
 variable "lab_username" {
   description = "Username for the AWS Console user"
-  default     = "uk-labl"
+  default     = "uk-lab1"
 }
 
 #Key Pair Name
@@ -105,7 +105,7 @@ variable "vpc_jumpbox_hostnum" {
 }
 
 ### Approved CIDR for access to Jumpbox - used by NSG REQUIRED
-### ChANGE THIS!
+### ChANGE THIS! dont forget the /32
 variable "vpc_jumpbox_allowed_cidr" {
   description = "Allowed CIDR block in array format"
   default     = "0.0.0.0/0"
